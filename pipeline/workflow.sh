@@ -28,7 +28,7 @@ source "$CONFIG_FILE"
 DATA_DIR="$(cd "$DATA_DIR" && pwd)/"
 
 src=$PROJECT_ROOT
-mhcdb=$src/databases/mhc_sequences
+mhcdb=$src/pipeline/databases/mhc_sequences
 dockq_repo=$DOCKQ_REPO
 
 #Slurm array concurrency (override in config if needed)
@@ -77,24 +77,28 @@ output_inference="${output_savedata}/structInference${suffix_output_inference}/"
 logs_path="${DATA_DIR%/}"
 
 logs_path_inside="${logs_path%/*}/logs/"
+
+echo "Logs will be saved in: ${logs_path_inside}"
 mkdir -p "${logs_path_inside}"
 
-logs_path="${logs_path%/*}"
-logs_path="${logs_path%/*}/logs/"
+#logs_path="${logs_path%/*}"
+#logs_path="${logs_path%/*}/logs/"
 
-mkdir -p "${logs_path}/"
+#echo "Logs path are: ${logs_path}"
+
+#mkdir -p "${logs_path}/"
 
 logs_path_datageneration="${logs_path_inside}/af3_datageneration_workflow${suffix_output_datagen}/"
 logs_path_inference="${logs_path_inside}/af3_inference${suffix_output_inference}/"
 
-logs_path_datageneration_slurm="${logs_path}/af3_datageneration_workflow${suffix_output_datagen}/"
-logs_path_inference_slurm="${logs_path}/af3_inference${suffix_output_inference}/"
+logs_path_datageneration_slurm="${logs_path_inside}/af3_datageneration_workflow${suffix_output_datagen}/"
+logs_path_inference_slurm="${logs_path_inside}/af3_inference${suffix_output_inference}/"
 
 ##Redirect log
 name_log="${DATA_DIR%/*}"
 name_log="${name_log%/*}"
 name_log="${name_log##*/}"
-exec >"${logs_path}/${name_log}${suffix_output_inference}_${SLURM_JOB_ID}.out" 2>"${logs_path}/${name_log}${suffix_output_inference}_${SLURM_JOB_ID}.err"
+exec >"${logs_path_inside}/${name_log}${suffix_output_inference}_${SLURM_JOB_ID}.out" 2>"${logs_path_inside}/${name_log}${suffix_output_inference}_${SLURM_JOB_ID}.err"
 
 
 ##1.Perform data preprocessing

@@ -72,7 +72,7 @@ To run the pipeline on your own targets, provide a CSV with the columns:
 - `TRA_aa`: TCR alpha chain sequence (we use the variable-domain-trimmed version).
 - `TRB_aa`: TCR beta chain sequence (variable-domain-trimmed).
 - `MHCA_aa` (optional): MHC alpha chain variable domain sequence. If absent, inferred from `allele` below.
-- `allele` (optional): MHC allele, used to look up `MHCA_aa` in the MHC database if not provided directly.
+- `allele` or `HLA` (optional): MHC allele, used to look up `MHCA_aa` in the MHC database if not provided directly. Should be in the format: HLA-A*01:01.
 - `pdb_id` (optional): PDB ID of the datapoint.
 - `A1, A2, A3, B1, B2, B3` (optional): CDR1-3 sequences of chains A/B — used only for naming.
 - `name` (optional): unique identifier per datapoint. Falls back to `pdb_id`, then to `peptide_A1_A2_A3_B1_B2_B3` or `peptide_TRAaa_TRBaa` if not provided.

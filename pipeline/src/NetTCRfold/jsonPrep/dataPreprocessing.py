@@ -173,7 +173,7 @@ def main() -> None:
                 #Try the TRA_aa format
                 if not all(col in df.columns for col in ["peptide", "TRA_aa", "TRB_aa"]):
                     raise ValueError(
-                        f"Input file must contain a 'name' column or the columns to create it. "
+                        f"Input file must contain a 'name' column or the columns to create it.\n This is either peptide, CDR1a, CDR2a, CDR3a, CDR1b, CDR2b, CDR3b or peptide, TRA_aa, TRB_aa.\n"
                         f"Found columns: {list(df.columns)}"
                     )
                 else:
@@ -183,9 +183,19 @@ def main() -> None:
                 df["name"] = df["peptide"] + "_" + df["A1"] + "_" + df["A2"] + "_" + df["A3"] + "_" + df["B1"] + "_" + df["B2"] + "_" + df["B3"] 
                 print("Unique identifier will be created using peptide, A1, A2, A3, B1, B2 and B3 columns.")
     if "MHCA_aa" not in df.columns:
-        df["MHCA_aa"] = df["allele"].map(
-            {allele: get_mhc_sequence(allele, args.mhc_db) for allele in df["allele"].unique()}
-        )
+        if "allele" in df.columns:
+            df["MHCA_aa"] = df["allele"].map(
+                {allele: get_mhc_sequence(allele, args.mhc_db) for allele in df["allele"].unique()}
+            )
+        elif "HLA" in df.columns:
+            df["MHCA_aa"] = df["HLA"].map(
+                {allele: get_mhc_sequence(allele, args.mhc_db) for allele in df["HLA"].unique()}
+            )
+        else:
+            raise ValueError(
+                f"Input file must contain a 'MHCA_aa' column or the columns to create it.\n This is either allele or HLA.\n"
+                f"Found columns: {list(df.columns)}"
+            )
 
 
     df["TRA_aa_id"] = "TRA_" + df["TRA_aa"].astype("category").cat.codes.astype(str)
